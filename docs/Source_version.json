@@ -1,0 +1,13 @@
+{
+  "application_url": "https://accidents-aeriens-esiee-berqbs6auc7f4txjtyjxip.streamlit.app/",
+  "repository_url": "https://github.com/bryanelboustani21/accidents-aeriens-esiee",
+  "deployed_code_base_commit": "a6624d646e165c749ecfef78e76fadb0923ed339",
+  "source_sha256": "8c02c45a48a2857553ea2da93573d5fa6a770c9885a298310542aa21b2a6577c",
+  "reference_period": [
+    1908,
+    2025
+  ],
+  "raw_rows": 5052,
+  "analytical_rows": 5043,
+  "date": "2026-11-06"
+}
