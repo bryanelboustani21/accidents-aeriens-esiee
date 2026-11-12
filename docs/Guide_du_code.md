@@ -1,113 +1,109 @@
-# Comprendre le code et les résultats
+# Comprendre app.py
 
-## 1. Ce qui se passe au lancement
+## 1. Les bibliothèques
 
-`app.py` charge le CSV avec `load_raw`, appelle `clean_data`, puis affiche une page
-choisie dans la barre latérale. Les filtres sélectionnent un sous-ensemble sans modifier
-le fichier brut. Les calculs et graphiques travaillent sur cette sélection.
+`streamlit` affiche la page et les commandes. `pandas` lit et manipule le tableau.
+`numpy` fournit les calculs et les valeurs manquantes. `matplotlib` dessine les
+courbes et les barres. `seaborn` dessine l'histogramme.
 
-## 2. Lecture et types
+## 2. charger_donnees : préparer un tableau utilisable
 
-Un DataFrame est un tableau dont les colonnes portent des noms. `pd.read_csv`
-lit le fichier et crée ce tableau. `pd.to_numeric(..., errors='coerce')` transforme
-en nombres les valeurs exploitables et signale les échecs par une valeur manquante.
-`pd.to_datetime` assemble l'année, le mois et le jour en une date comparable.
+```python
+brut = pd.read_csv("data/raw/aircrashesFullData.csv", sep=",")
+```
 
-## 3. Nettoyage et drapeaux
+Un CSV est un fichier texte. La virgule sépare les champs. La première ligne
+contient les noms de colonnes. `brut` est un DataFrame : un tableau avec des
+lignes et des colonnes. Le résultat est 5 052 lignes et 12 colonnes.
+Les guillemets protègent un texte contenant lui-même une virgule. Il faut
+laisser le lecteur CSV les traiter, plutôt que découper chaque ligne à la main.
 
-`source_row` indique le numéro de ligne dans le CSV original, en comptant l'en-tête.
-Il sert à retrouver une anomalie. `country_raw` et `manufacturer_raw` gardent
-les libellés originaux avec seulement une normalisation des espaces.
+`drop_duplicates()` enlève les lignes identiques. `.copy()` crée une copie.
+Le fichier brut reste intact. `pd.to_numeric(..., errors="coerce")` convertit
+une colonne en nombres et met une valeur impossible à convertir en manquante.
+`np.nan` désigne une valeur numérique manquante.
 
-`resolve_country` applique des correspondances exactes : un nom ISO, un alias
-écrit explicitement ou une région reconnue. `New` et `South` ne suffisent pas à
-identifier un pays. `Georgia`, `Congo` et `Victoria` sont ambigus dans ce fichier.
-Aucune correction approximative ne leur attribue arbitrairement un pays.
+```python
+df = df[(df["Year"] >= 1908) & (df["Year"] <= 2023)].copy()
+```
 
-Les colonnes booléennes indiquent si une condition est vraie ou fausse :
+Chaque comparaison produit des vrais et des faux. `&` impose les deux conditions.
+Les crochets conservent seulement les lignes vraies. Il reste 5 017 lignes.
+`astype(int)` donne des années entières.
 
-| Colonne | Sens |
-|---|---|
-| `date_valid` | Date lisible et non postérieure au 6 novembre 2026 |
-| `counts_valid` | Occupants, décès à bord et décès au sol renseignés, entiers et non négatifs |
-| `fatalities_exceed_aboard` | Décès à bord supérieurs aux occupants |
-| `survival_valid` | Comptes valides, occupants strictement positifs et décès cohérents |
-| `analysis_valid` | Date et comptes valides, et absence de doublon exact à retirer |
+`fillna` remplace une absence de texte. `str.split().str.join(" ")` uniformise
+les espaces. Les trois colonnes Constructeur, Modele et Operateur servent aux
+menus, les colonnes anglaises originales restent consultables.
 
-La validité générale ne garantit pas l'exactitude historique de chaque ligne.
-Les 22 occupations nulles sont exclues seulement du calcul de survie. Parmi elles,
-9 lignes indiquent des décès positifs. On ne transforme ni ces occupants en décès,
-ni ces décès en zéro. Les anomalies restent consultables.
+`str.startswith` reconnaît un début explicite, comme Boeing. Le masque
+`restant` garantit que de Havilland Canada garde sa famille spécifique avant
+le test de Havilland. Les variantes écrites Boeing B 737 et Boeing 737 Max...
+sont regroupées sous Boeing 737. Aucune reconstruction automatique des autres
+modèles n'est faite.
 
-## 4. Taux pondéré de survie
+Pour Air France, `str.contains("air france", regex=False)` cherche ces mots
+consécutifs. Ce sont seulement les mentions explicites de la base. Le programme
+ne transforme pas Transaviaexport en Transavia.
 
-Sur les mêmes lignes valides :
+`Year // 10 * 10` calcule le début de décennie : 1987 donne 1980.
+`@st.cache_data` évite de relire le fichier à chaque déplacement de curseur,
+comme dans test.py. `return` renvoie le brut et le tableau préparé.
 
-`survivants = occupants - décès_à_bord`
+## 3. calculer_indicateurs : définir les populations
 
-`taux = somme(survivants) / somme(occupants)`
+Le total déclaré additionne les décès renseignés de la sélection. Les lignes
+sans décès à bord sont celles avec Fatalities (air) = 0. La moyenne d'une série
+de vrais/faux donne leur proportion, car vrai vaut 1 et faux vaut 0.
 
-Exemple fictif : 10 survivants sur 10 occupants dans une ligne, puis 0 sur 100
-dans une autre. Le taux agrégé vaut 10 / 110 = 9,1 %, pas la moyenne simple
-de 100 % et 0 %, qui donnerait 50 %. Le premier calcul pondère par les personnes.
+Pour calculer la survie, on retient Aboard > 0, décès connus et
+0 ≤ décès ≤ Aboard. Les 22 occupations nulles de 1908–2023 ne permettent pas
+un taux et ne sont pas inventées. Elles restent dans les autres indicateurs.
+Les 9 décès supérieurs aux occupants sont inclus dans ces 22 cas.
 
-Le taux concerne cette sélection d'accidents. Il ne désigne pas la probabilité
-de survivre à un voyage en avion.
+```python
+valides["Survivants"] = valides["Aboard"] - valides["Fatalities (air)"]
+taux_survie = 100 * valides["Survivants"].sum() / valides["Aboard"].sum()
+```
 
-## 5. Groupby et filtres
+Exemple : 10 survivants sur 10 occupants et 0 sur 100. La survie globale vaut
+10/110 = 9,09 %. La moyenne des taux 100 % et 0 % vaut 50 % et décrit autre chose.
+Le dashboard utilise le taux global. `if len(valides) > 0` évite une division
+sans population. Un taux impossible à calculer s'affiche Non calculable.
 
-`groupby('year')` rassemble les lignes d'une même année. `agg` calcule un effectif
-et une somme par groupe. `between(1980,1999)` produit un masque booléen pour la
-période. `isin(...)` teste si la catégorie appartient à la liste choisie.
-Un `reindex` réintroduit les années absentes avec zéro enregistrement dans le fichier.
-Cela ne signifie pas zéro accident réel pendant ces années.
+## 4. afficher_application : filtres et affichage
 
-## 6. Simulation avec remise, pas à pas
+Les selectbox et le slider fonctionnent comme les contrôles de test.py.
+Les options du modèle dépendent du constructeur, celles de l'opérateur des
+choix précédents. L'option Tous conserve toutes les catégories disponibles.
+La période s'applique en dernier et peut donner une sélection vide. Le message
+correspondant indique une absence de ligne dans le fichier.
 
-1. Garder les lignes compatibles avec le calcul de survie.
-2. Transformer les colonnes occupants/décès en tableau NumPy.
-3. Tirer des indices de lignes avec `RandomState(seed).randint`.
-4. Récupérer des lignes entières avec ces indices. La même ligne peut revenir.
-5. Additionner occupants et décès pour chaque répétition.
-6. Répéter 1 000 fois et décrire la distribution des totaux.
+`st.columns` dispose les quatre indicateurs. `st.metric` affiche leur valeur.
+Ce sont des compléments d'affichage simples au cours, sans nouveau calcul.
 
-On tire les deux colonnes ensemble : cela évite d'associer les décès d'un grand
-appareil aux occupants d'un autre. La graine 42 reproduit les mêmes tirages.
-Q05 est le 5e centile des résultats, Q95 le 95e. Les valeurs peuvent être
-interpolées et donc non entières. L'intervalle central des simulations n'est
-pas un intervalle de confiance sur la sécurité aérienne.
+`groupby("Decennie").size()` compte les lignes par décennie.
+`np.arange` fabrique la liste des décennies et `reindex(..., fill_value=0)`
+complète les décennies sans ligne. `plt.subplots` crée une figure et un axe.
+`ax.plot` trace la courbe, `ax.bar` les barres, `sns.histplot` l'histogramme.
+`st.pyplot(fig)` montre la figure, comme dans le TD Streamlit.
+`plt.close(fig)` ferme la figure après affichage pour libérer la mémoire.
 
-Hypothèses : les lignes sont échangeables, tirées indépendamment avec la même
-probabilité. La source mélange des périodes et opérations différentes. Changer
-la période ou le pays modifie la population simulée. Ce modèle pédagogique
-n'est donc pas un outil de prévision ni une démonstration causale.
+L'histogramme utilise 20 intervalles égaux entre minimum et maximum de la
+sélection. `np.mean` et `np.median` en donnent la moyenne et la médiane.
+Les intervalles se recalculent après un filtre : ne pas comparer directement
+les hauteurs de deux histogrammes dont les bornes ont changé.
 
-## 7. Sensibilité de gravité
+`head(50)` limite l'extrait à 50 lignes. Le bouton télécharge toutes les lignes
+de la sélection. `to_csv(index=False, sep=",")` génère le CSV. L'encodage
+utf-8-sig aide Excel à reconnaître les accents. La checkbox montre la méthode.
 
-Pour une réduction relative r : `F_hypothétique = F_observé * (1-r)`.
-Une baisse relative de 10 % ne signifie pas une hausse de 10 points du taux
-de survie. Les résultats théoriques peuvent être décimaux. Le calcul ne dit pas
-qu'une mesure réelle produira cette baisse : il impose la baisse pour en explorer l'effet.
+Le bloc `if __name__ == "__main__"` lance l'interface lorsque le programme
+s'exécute. Il permet aussi de vérifier les fonctions sans afficher l'application.
 
-## 8. Statistiques et graphiques
+## Questions à expliquer avec ses mots
 
-La moyenne est sensible aux grands événements. La médiane décrit une valeur
-centrale plus robuste. Le boxplot montre la médiane et l'intervalle interquartile.
-Les moustaches s'étendent aux valeurs dans 1,5 fois l'intervalle interquartile.
-Un point au-delà est atypique selon cette règle, pas nécessairement erroné.
-
-Une corrélation mesure une association linéaire. Occupants et décès sont liés par
-la capacité de l'appareil et par la contrainte décès <= occupants sur les lignes valides.
-Une forte corrélation ne démontre donc pas qu'un grand appareil est plus dangereux.
-
-## 9. Questions probables à l'oral
-
-- Pourquoi ne pas supprimer toutes les lignes incomplètes ? Parce que l'utilité
-  d'une ligne dépend du calcul. Un pays absent n'empêche pas une analyse annuelle.
-- Pourquoi exclure 2026 par défaut ? L'année et la collecte sont partielles.
-- Pourquoi ne pas additionner tous les décès au sol ? Certains bilans d'un même
-  événement apparaissent sur plusieurs lignes, sans identifiant fiable de regroupement.
-- Pourquoi ne pas classer les compagnies par danger ? Le nombre de vols manque.
-- Pourquoi garder des événements extrêmes ? Une grande valeur peut être réelle.
-- Pourquoi le taux de survie ne monte-t-il pas forcément quand les effectifs baissent ?
-  Les deux indicateurs n'ont pas le même dénominateur et la composition de la base change.
+Pourquoi exclure Aboard = 0 de la survie ? Pourquoi garder ces lignes ailleurs ?
+Pourquoi un taux global diffère-t-il d'une moyenne des taux par accident ?
+Pourquoi garder un événement très grave ? Pourquoi la courbe ne mesure-t-elle
+pas un risque par vol ? Que signifie une sélection vide ? Quelles corrections
+des noms sont certaines et lesquelles restent impossibles ?

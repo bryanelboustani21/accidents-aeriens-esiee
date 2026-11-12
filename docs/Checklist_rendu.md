@@ -1,22 +1,19 @@
-# Consignes et preuves dans les rendus
+# Correspondance aux consignes
 
-| Exigence | Preuve |
+| Exigence | Élément remis |
 |---|---|
-| Dataset Kaggle justifié | Rapport, source et README |
-| Problématique précise | Rapport, support et page Méthode |
-| Nettoyage et décisions | analyse.py, audit, drapeaux et table des pays |
-| NumPy et Pandas | Tableaux, filtres, calculs vectorisés et agrégations |
-| Analyse exploratoire | Statistiques, distributions et évolution |
-| Graphiques justifiés | graphiques.py, légendes du dashboard et rapport |
-| Matplotlib et Seaborn | Courbes, barres, histogramme, scatter, boxplot et heatmap |
-| Dashboard interactif | Sept pages, filtres, quatre scénarios et exports |
-| Rapport | Méthode, résultats, interprétations et limites |
-| Présentation de 15–20 min | Seize diapositives, notes et déroulé de 18 minutes |
-| Simulation de présentation client | Guide_client.md et démonstration en ligne |
-| Reproductibilité | Données brutes, empreinte, dépendances, preparer.py et huit tests |
-| Lien avec le cours | Correspondance_cours.md, avec les adaptations identifiées |
+| Choix Kaggle et question | Rapport, slide 2 et README |
+| Nettoyage expliqué | charger_donnees, texte de méthode, rapport et guide du code |
+| NumPy et Pandas | Filtres, agrégations, moyenne, médiane et décennies |
+| Plusieurs graphiques justifiés | Courbe, barres et histogramme avec légendes |
+| Matplotlib et Seaborn | ax.plot, ax.bar et sns.histplot |
+| Dashboard interactif intuitif | Une page, trois menus et un curseur |
+| Interprétation finale | Bas de page, rapport et conclusion de l'oral |
+| Rapport | Données, méthode, résultats, visuels et limites |
+| Présentation de 15–20 minutes | 16 diapositives, notes et déroulé de 18 minutes |
+| Scénarios client | Boeing 737, deux périodes et sélection vide |
+| Remise du code | GitHub, app.py, CSV et requirements.txt |
 
-Avant remise : indiquer les membres du groupe si demandé, vérifier la date et le
-canal de dépôt et confirmer la technique de simulation attendue si l'enseignant
-la précise. Ne pas aplatir les dossiers. Pour le code, utiliser Code / Download ZIP
-sur GitHub, qui conserve les chemins.
+Ajouter les noms des membres du groupe avant la remise si demandé.
+Respecter la règle donnée par l'enseignant sur l'utilisation des outils d'aide.
+Chaque membre doit comprendre les filtres et les formules qu'il présente.
