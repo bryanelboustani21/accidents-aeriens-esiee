@@ -39,4 +39,13 @@ assert np.isnan(calculer_indicateurs(exemple.iloc[2:4])[2])
 inconnus = pd.DataFrame({"Aboard": [10], "Fatalities (air)": [np.nan]})
 assert all(np.isnan(x) for x in calculer_indicateurs(inconnus)[1:])
 
+# Les libellés inconnus changent de catégorie sans perdre leur texte ni leur bilan.
+for source, cible in [("Aircraft Manufacturer", "Constructeur"), ("Aircraft", "Modele")]:
+    inconnus = df[source].str.startswith("?", na=False)
+    assert inconnus.sum() == 15
+    assert df.loc[inconnus, cible].eq("Non renseigné").all()
+    assert not df[cible].str.startswith("?", na=False).any()
+    pd.testing.assert_series_equal(df[source], brut.loc[df.index, source])
+assert len(df[df["Constructeur"] == "Non renseigné"]) == 15
+
 print("Vérifications réussies : CSV, périmètre, regroupements, taux et cas limites.")

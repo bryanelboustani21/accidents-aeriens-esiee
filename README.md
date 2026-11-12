@@ -42,7 +42,10 @@ un total de décès différent du total déclaré sur toutes les lignes.
 Les colonnes utiles deviennent numériques. Une valeur invalide ou négative
 reste manquante. Les doublons exacts sont retirés, aucun n'est présent dans ce
 fichier. Les espaces sont uniformisés et les opérateurs absents deviennent
-Non renseigné. Neuf familles de constructeurs et dix modèles Boeing sont
+Non renseigné. Les libellés commençant par `?` sont également classés
+Non renseigné dans les menus, sans supprimer les lignes. Sur 1908–2023,
+15 lignes sont concernées pour le constructeur et le type d'appareil.
+Neuf familles de constructeurs et dix modèles Boeing sont
 regroupés par préfixes explicites. Les autres libellés restent tels qu'écrits.
 Les colonnes originales restent dans le tableau et l'export.
 

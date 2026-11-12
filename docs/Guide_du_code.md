@@ -35,6 +35,11 @@ Les crochets conservent seulement les lignes vraies. Il reste 5 017 lignes.
 les espaces. Les trois colonnes Constructeur, Modele et Operateur servent aux
 menus, les colonnes anglaises originales restent consultables.
 
+`str.startswith("?")` repère un libellé dont le début ne permet pas d’identifier
+la catégorie. Ces valeurs deviennent Non renseigné dans les menus. Les 15 lignes
+concernées conservent leur texte brut et leurs bilans ; aucun constructeur ni
+modèle n’est inventé.
+
 `str.startswith` reconnaît un début explicite, comme Boeing. Le masque
 `restant` garantit que de Havilland Canada garde sa famille spécifique avant
 le test de Havilland. Les variantes écrites Boeing B 737 et Boeing 737 Max...
@@ -52,8 +57,9 @@ comme dans test.py. `return` renvoie le brut et le tableau préparé.
 ## 3. calculer_indicateurs : définir les populations
 
 Le total déclaré additionne les décès renseignés de la sélection. Les lignes
-sans décès à bord sont celles avec Fatalities (air) = 0. La moyenne d'une série
-de vrais/faux donne leur proportion, car vrai vaut 1 et faux vaut 0.
+sans décès à bord sont celles avec Fatalities (air) = 0. Le programme les compte
+avec `nombre_sans_deces`, puis calcule `100 * nombre_sans_deces / len(connus)`.
+Le dénominateur comprend seulement les lignes dont le bilan est connu.
 
 Pour calculer la survie, on retient Aboard > 0, décès connus et
 0 ≤ décès ≤ Aboard. Les 22 occupations nulles de 1908–2023 ne permettent pas
@@ -62,7 +68,9 @@ Les 9 décès supérieurs aux occupants sont inclus dans ces 22 cas.
 
 ```python
 valides["Survivants"] = valides["Aboard"] - valides["Fatalities (air)"]
-taux_survie = 100 * valides["Survivants"].sum() / valides["Aboard"].sum()
+total_survivants = valides["Survivants"].sum()
+total_occupants = valides["Aboard"].sum()
+taux_survie = 100 * total_survivants / total_occupants
 ```
 
 Exemple : 10 survivants sur 10 occupants et 0 sur 100. La survie globale vaut

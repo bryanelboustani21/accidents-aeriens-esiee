@@ -17,6 +17,9 @@
 Les numéros désignent les pages PDF. Les regroupements de noms sont une
 application des conditions et des chaînes de caractères. Les préfixes retenus
 sont explicites et les colonnes originales restent disponibles.
+Les libellés commençant par `?` sont classés Non renseigné dans les menus.
+Cette règle concerne 15 lignes pour le constructeur et le type d’appareil,
+sans supprimer ces lignes ni changer les bilans humains.
 
 Compléments pratiques à expliquer : pd.to_numeric, drop_duplicates, astype,
 les méthodes str, reindex et copy ne figurent pas tous explicitement dans

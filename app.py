@@ -24,6 +24,9 @@ def charger_donnees():
         df[cible] = df[source].fillna("Non renseigné")
         df[cible] = df[cible].str.split().str.join(" ")
         df[cible] = df[cible].replace("", "Non renseigné")
+        # Un texte commençant par ? ne permet pas d’identifier cette catégorie.
+        inconnu = df[cible].str.startswith("?")
+        df.loc[inconnu, cible] = "Non renseigné"
 
     # Préfixes explicites. Les autres noms restent tels qu'ils sont écrits.
     familles = ["McDonnell Douglas", "de Havilland Canada", "de Havilland",
@@ -96,7 +99,7 @@ def afficher_application():
         selection = selection[selection["Operateur"] == operateur]
     debut, fin = st.sidebar.slider("Période d'analyse", 1908, 2023, (1908, 2023))
     selection = selection[(selection["Year"] >= debut) & (selection["Year"] <= fin)]
-    st.sidebar.caption("Certains noms d'opérateurs sont incomplets. Les libellés bruts restent consultables dans le tableau.")
+    st.sidebar.caption("Les libellés commençant par ? sont classés Non renseigné. Les textes d'origine restent consultables dans le tableau.")
 
     st.subheader("Les chiffres de votre sélection")
     st.caption(f"{constructeur} / {modele} / {operateur} / {debut}–{fin}")
@@ -167,7 +170,7 @@ def afficher_application():
     if st.checkbox("Afficher le nettoyage et les définitions"):
         st.write(f"Fichier brut : {brut.shape[0]} lignes et {brut.shape[1]} colonnes. Périmètre 1908–2023 : {len(df)} lignes.")
         st.write(f"Doublons exacts : {brut.duplicated().sum()}. Opérateurs absents dans le fichier brut : {brut['Operator'].isna().sum()}.")
-        st.write("Les nombres sont convertis avec Pandas. Une valeur invalide reste manquante. Les espaces sont uniformisés. Les opérateurs absents portent le libellé Non renseigné.")
+        st.write("Les nombres sont convertis avec Pandas. Une valeur invalide reste manquante. Les espaces sont uniformisés. Les textes absents ou commençant par ? portent le libellé Non renseigné dans les menus ; les colonnes d'origine sont conservées.")
         st.write("Les constructeurs sont regroupés par préfixe explicite. Pour Boeing, les modèles 707, 717, 720, 727, 737, 747, 757, 767, 777 et 787 sont regroupés par famille écrite. Les autres types conservent leur libellé.")
         st.write("Air France (mention explicite) regroupe seulement les textes contenant air france. Ce filtre ne garantit pas de retrouver tous les événements de cette compagnie. Transaviaexport reste distincte de Transavia.")
         st.write("Survie globale = 100 × somme des survivants / somme des occupants. Sans décès à bord = 100 × nombre de lignes à zéro décès / nombre de lignes au bilan connu.")
