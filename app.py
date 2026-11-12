@@ -7,6 +7,7 @@ import seaborn as sns
 
 @st.cache_data
 def charger_donnees():
+    """Lire le CSV et préparer les colonnes utilisées dans les filtres."""
     # Une virgule sépare les colonnes. Le fichier d'origine reste intact.
     brut = pd.read_csv("data/raw/aircrashesFullData.csv", sep=",")
     df = brut.drop_duplicates().copy()
@@ -20,7 +21,8 @@ def charger_donnees():
     df["Year"] = df["Year"].astype(int)
     for source, cible in [("Aircraft Manufacturer", "Constructeur"),
                           ("Aircraft", "Modele"), ("Operator", "Operateur")]:
-        df[cible] = df[source].fillna("Non renseigné").str.split().str.join(" ")
+        df[cible] = df[source].fillna("Non renseigné")
+        df[cible] = df[cible].str.split().str.join(" ")
         df[cible] = df[cible].replace("", "Non renseigné")
 
     # Préfixes explicites. Les autres noms restent tels qu'ils sont écrits.
@@ -48,11 +50,15 @@ def charger_donnees():
 
 
 def calculer_indicateurs(selection):
+    """Calculer les indicateurs sur les lignes utilisables pour chaque calcul."""
     # Décès connus : dénominateur de la part des lignes sans décès.
     connus = selection[selection["Fatalities (air)"].notna()]
+    deces = np.nan
     sans_deces = np.nan
     if len(connus) > 0:
-        sans_deces = 100 * (connus["Fatalities (air)"] == 0).mean()
+        deces = connus["Fatalities (air)"].sum()
+        nombre_sans_deces = len(connus[connus["Fatalities (air)"] == 0])
+        sans_deces = 100 * nombre_sans_deces / len(connus)
 
     # Même population pour les survivants, les décès et les occupants.
     masque = ((selection["Aboard"] > 0)
@@ -62,12 +68,14 @@ def calculer_indicateurs(selection):
     valides["Survivants"] = valides["Aboard"] - valides["Fatalities (air)"]
     taux_survie = np.nan
     if len(valides) > 0:
-        taux_survie = 100 * valides["Survivants"].sum() / valides["Aboard"].sum()
-    deces = connus["Fatalities (air)"].sum() if len(connus) > 0 else np.nan
+        total_survivants = valides["Survivants"].sum()
+        total_occupants = valides["Aboard"].sum()
+        taux_survie = 100 * total_survivants / total_occupants
     return valides, deces, taux_survie, sans_deces
 
 
 def afficher_application():
+    """Afficher les filtres, les indicateurs et les graphiques."""
     st.set_page_config(page_title="Accidents aériens", layout="wide")
     st.title("Accidents aériens : bilan historique")
     st.write("Choisissez un constructeur, un appareil et un opérateur pour explorer les données de 1908 à 2023.")
