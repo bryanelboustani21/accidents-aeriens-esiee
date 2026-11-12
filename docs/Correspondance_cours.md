@@ -1,5 +1,9 @@
 # Méthodes et supports du cours
 
+## Problématique
+
+Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?
+
 | Programme | Notion | Support fourni |
 |---|---|---|
 | imports, def, if, for, listes et return | Bases de Python | Chap1_Cours1_2 |

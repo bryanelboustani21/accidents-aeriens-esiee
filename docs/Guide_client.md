@@ -1,5 +1,9 @@
 # Démonstration du dashboard
 
+## Problématique
+
+Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?
+
 Lien : https://accidents-aeriens-esiee-berqbs6auc7f4txjtyjxip.streamlit.app/
 
 La sélection par défaut est Tous / Tous / Tous / 1908–2023.

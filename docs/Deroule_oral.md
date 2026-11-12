@@ -1,41 +1,46 @@
-# Oral de 18 minutes
+# Déroulé de la présentation
 
-Le support contient 16 diapositives avec notes. Les durées incluent deux minutes
-de démonstration sur le dashboard hébergé. Répartir les slides entre les membres
-et répéter avec un chronomètre.
+## Problématique
 
-| Slide | Sujet | Durée |
+Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?
+
+Le support comporte 21 diapositives avec notes. Durée prévue : environ 19 min 30, dont trois minutes d’introduction et deux minutes de démonstration. Répartir les diapositives entre les membres et répéter avec un chronomètre.
+
+| Diapositive | Sujet | Durée prévue |
 |---|---|---|
-| 1 | Sujet | 0:30 |
-| 2 | Question et données | 1:00 |
-| 3 | Lecture du CSV | 1:00 |
-| 4 | Nettoyage | 1:30 |
-| 5 | Filtres | 1:00 |
-| 6 | Indicateurs | 1:30 |
-| 7 | Taux de survie | 1:30 |
-| 8 | Évolution | 1:00 |
-| 9 | Survivants et décès | 1:00 |
-| 10 | Distribution | 1:00 |
-| 11 | Boeing 737 | 1:00 |
-| 12 | Deux périodes | 1:30 |
-| 13 | Opérateurs | 1:00 |
-| 14 | Démonstration | 2:00 |
-| 15 | Limites et cours | 1:00 |
-| 16 | Conclusion | 0:30 |
+| 1 | Accidents aériens et présentation du groupe | 0:25 |
+| 2 | Pourquoi avoir choisi ce sujet ? | 1:15 |
+| 3 | La question qui guide notre travail | 1:20 |
+| 4 | Aviation militaire et aviation commerciale | 0:45 |
+| 5 | Une ligne du CSV devient plusieurs colonnes | 0:55 |
+| 6 | Le nettoyage change les libellés, pas les faits | 1:05 |
+| 7 | La survie demande des données cohérentes | 1:00 |
+| 8 | 11 occupants, 8 décès : comment lire la survie ? | 0:55 |
+| 9 | Le choix à gauche pilote les résultats à droite | 1:00 |
+| 10 | Les indicateurs répondent à des questions différentes | 0:55 |
+| 11 | Les effectifs du fichier varient selon l’époque | 0:45 |
+| 12 | La barre entière représente 155 827 occupants | 0:55 |
+| 13 | Les faibles bilans sont les plus nombreux | 0:45 |
+| 14 | Notre cas d’étude : le Boeing 737 | 0:40 |
+| 15 | Le nombre d’enregistrements baisse | 0:55 |
+| 16 | Le bilan humain augmente pourtant | 1:15 |
+| 17 | Le parcours que nous allons tester | 2:00 |
+| 18 | Les compléments au cours ont un rôle précis | 0:40 |
+| 19 | Nos chiffres décrivent ce fichier | 0:35 |
+| 20 | Streamlit permet de vérifier la comparaison | 0:45 |
+| 21 | La gravité ne se lit pas dans un seul chiffre | 0:40 |
 
-## Démonstration, slide 14
+## Démonstration, diapositive 17
 
-Avant le passage : ouvrir le lien du dashboard et revenir aux valeurs par défaut.
+Avant le passage, ouvrir le dashboard et revenir aux valeurs par défaut.
 
-- 0:00–0:30 : Tous, 1908–2023. Montrer les quatre chiffres et leur périmètre.
-- 0:30–1:00 : choisir Boeing puis Boeing 737. Lire 102 lignes et 39,4 % de survie.
-- 1:00–1:40 : passer à 1980–1999 puis 2000–2019. Les fenêtres durent vingt ans.
-- 1:40–2:00 : choisir 1908–1909, montrer le message puis revenir à 1908–2023.
+- Retrouver 5 017 lignes sur Tous / Tous / Tous / 1908–2023.
+- Choisir Boeing puis Boeing 737, avec Tous pour l’opérateur : 102 lignes.
+- Comparer 1980–1999 et 2000–2019 : 50 puis 41 lignes, 2 496 puis 2 680 décès à bord déclarés.
+- Consulter le tableau et le téléchargement CSV, puis montrer la sélection vide sur 1908–1909.
+- Revenir à 1908–2023.
 
-La slide 13 explique le filtre opérateur. Si le temps le permet après la
-présentation, montrer Air France (mention explicite) avec Tous pour les deux
-premiers menus. Le résultat porte sur 7 libellés explicites et reste incomplet.
-Voir Guide_client.md pour les valeurs attendues.
+Pour montrer le filtre opérateur après la démonstration principale, revenir à Tous pour le constructeur et le modèle puis sélectionner Air France (mention explicite). Le résultat porte sur sept mentions et ne constitue pas l’historique complet de la compagnie. Voir Guide_client.md.
 
 ## Préparation aux questions
 

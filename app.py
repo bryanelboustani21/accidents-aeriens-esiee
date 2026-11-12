@@ -81,6 +81,7 @@ def afficher_application():
     """Afficher les filtres, les indicateurs et les graphiques."""
     st.set_page_config(page_title="Accidents aériens", layout="wide")
     st.title("Accidents aériens : bilan historique")
+    st.write("Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?")
     st.write("Choisissez un constructeur, un appareil et un opérateur pour explorer les données de 1908 à 2023.")
     st.info("Ces résultats décrivent les événements présents dans le fichier. Le nombre total de vols est inconnu : aucun risque par vol n'est calculé.")
     brut, df = charger_donnees()

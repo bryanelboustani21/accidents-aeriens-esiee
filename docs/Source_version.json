@@ -9,5 +9,8 @@
   ],
   "raw_rows": 5052,
   "analytical_rows": 5017,
-  "entry_point": "app.py"
+  "entry_point": "app.py",
+  "problem_statement": "Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?",
+  "presentation_slides": 21,
+  "presentation_duration_seconds": 1170
 }

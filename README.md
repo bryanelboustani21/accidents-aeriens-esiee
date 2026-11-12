@@ -1,5 +1,9 @@
 # Accidents aériens : bilan historique
 
+## Problématique
+
+Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?
+
 Projet ESIEE Paris. Version simple du 12 novembre 2026.
 
 **[Ouvrir le dashboard en ligne](https://accidents-aeriens-esiee-berqbs6auc7f4txjtyjxip.streamlit.app/)**
@@ -76,7 +80,7 @@ reproduction du code par une personne qui souhaite l'exécuter elle-même.
 
 - `docs/Guide_du_code.md` : explications des instructions et des calculs.
 - `docs/Guide_client.md` : manipulations et résultats attendus.
-- `docs/Deroule_oral.md` : 16 diapositives, 18 minutes.
+- `docs/Deroule_oral.md` : 21 diapositives, environ 19 min 30.
 - `docs/Correspondance_cours.md` : lien avec les supports du cours.
 - `docs/Checklist_rendu.md` : correspondance aux exigences.
 

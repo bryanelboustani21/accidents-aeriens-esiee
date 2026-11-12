@@ -1,5 +1,9 @@
 # Comprendre app.py
 
+## Problématique
+
+Comment le nombre d’accidents et leur bilan humain changent-ils selon le constructeur, le modèle d’avion, l’opérateur et la période étudiée ?
+
 ## 1. Les bibliothèques
 
 `streamlit` affiche la page et les commandes. `pandas` lit et manipule le tableau.
