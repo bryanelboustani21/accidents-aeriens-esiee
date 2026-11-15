@@ -28,11 +28,9 @@ Une sélection vide déclenche un message. Les graphiques qui ne peuvent pas êt
 | `app.py` | Programme Streamlit : chargement, nettoyage, indicateurs et affichage |
 | `aircrashesFullData.csv` | Données brutes, à la racine du dépôt, à côté de `app.py` |
 | `requirements.txt` | Bibliothèques Python nécessaires |
-| `.streamlit/config.toml` | Configuration de l’apparence |
+| `.streamlit/config.toml` | Thème sombre par défaut |
 
 Le programme contient trois fonctions : `charger_donnees`, `calculer_indicateurs` et `afficher_application`.
-
-Les dossiers `data/raw/`, `docs/` et `tests/` présents dans le dépôt proviennent d’une version précédente. Ils ne sont pas nécessaires au fonctionnement de cet `app.py`. Leurs anciens guides et tests ne constituent pas la documentation ni la validation de cette version.
 
 ## CSV et période retenue
 
@@ -118,7 +116,7 @@ Sur Streamlit Community Cloud, le fichier principal à sélectionner est **`app.
 - Rapport harmonisé : **Rapport_SkyStats.docx**.
 - Présentation harmonisée : **Presentation_SkyStats.pptx**, 19 diapositives avec notes pour l’oral.
 
-Le rapport et la présentation sont remis séparément. Les anciennes indications de 21 diapositives présentes dans les documents historiques du dépôt ne s’appliquent pas à cette version.
+Le rapport et la présentation sont remis séparément.
 
 ## Source
 
