@@ -113,8 +113,8 @@ Sur Streamlit Community Cloud, le fichier principal à sélectionner est **`app.
 ## Livrables
 
 - Code : `app.py`, CSV, dépendances et configuration de ce dépôt.
-- Rapport harmonisé : **Rapport_SkyStats.docx**.
-- Présentation harmonisée : **Presentation_SkyStats.pptx**, 19 diapositives avec notes pour l’oral.
+- Rapport harmonisé : **Rapport_SkyStats_Final.docx**.
+- Présentation harmonisée : **Presentation_SkyStats_Finale.pptx**, 20 diapositives avec notes pour l’oral : 18 minutes, démonstration comprise. Quatre parties de 4 min 30, dans l’ordre Liam, Ryad, Louis, Bryan.
 
 Le rapport et la présentation sont remis séparément.
 
